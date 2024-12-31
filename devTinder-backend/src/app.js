@@ -2,22 +2,61 @@ const express = require("express");
 const connectDB = require("./config/database");
 const app = express();
 const User = require("./models/user");
+const  validateSignUpData  = require("../utils/validation");
+const bcrypt = require("bcrypt");
 
 // Middleware
 app.use(express.json());
 
 // Signup route
 app.post("/signup", async (req, res) => {
-    const user = new User(req.body); // Creating a new instance of the User model
-
     try {
-        await user.save();
-        res.status(201).send("User added successfully");
+      // Validation of data
+      validateSignUpData(req);
+  
+      // Destructure required fields from req.body
+      const { firstName, lastName, emailId, password } = req.body;
+  
+      // Encrypt the password
+      const passwordHash = await bcrypt.hash(password, 10);
+      console.log(passwordHash);
+  
+      // Create a new instance of the User model
+      const user = new User({
+        firstName,
+        lastName,
+        emailId,
+        password: passwordHash,
+      });
+  
+      await user.save();
+      res.status(201).send("User added successfully");
     } catch (err) {
-        res.status(400).json({ message: "Error in adding user", error: err.message });
+      res.status(400).json({ message: "Error in adding user", error: err.message });
     }
-});
+  });
+  
+  app.post("/login", async (req, res) => {
+    try {
+      const { emailId, password } = req.body;
+    if (!emailId || !password) {
+        return res.status(400).send("Please provide email and password");
+      }
+  
+    const user = await User .findOne({ emailId:emailId });
+    if (!user) {
+        return res.status(404).send("User not found");
+      }
+      const isPasswordValid= await bcrypt.compare(password,user.password);
+      if(isPasswordValid){
+          return res.status(200).send("Login success");
+      }
+        res.status(400).send("Invalid password");
 
+    } catch (err) {
+      res.status(400).json({ message: "Error in login", error: err.message });
+    }
+  });
 // Get user by email
 app.get("/user", async (req, res) => {
     const userEmail = req.body.emailId;
