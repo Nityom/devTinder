@@ -1,8 +1,7 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
 const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken'); // Ensure jwt is imported
-
+const jwt = require('jsonwebtoken');
 const userSchema = new mongoose.Schema(
     {
         firstName: {
@@ -66,19 +65,10 @@ const userSchema = new mongoose.Schema(
         },
     },
     {
-        timestamps: true, // Automatically adds createdAt and updatedAt
+        timestamps: true, 
     }
 );
 
-// Hash password before saving
-userSchema.pre("save", async function (next) {
-    const user = this;
-
-    if (user.isModified("password")) {
-        user.password = await bcrypt.hash(user.password, 10); // Hash with salt rounds
-    }
-    next();
-});
 
 // Generate JWT
 userSchema.methods.getJWT = async function () {
@@ -90,9 +80,11 @@ userSchema.methods.getJWT = async function () {
 };
 
 // Validate Password
-userSchema.methods.validatePassword = async function (passwordInputByUser) {
+userSchema.methods.validatePassword = async function(passwordInputByUser) {
     const user = this;
-    const isPasswordValid = await bcrypt.compare(passwordInputByUser, user.password);
+    const passwordHash = user.password;
+
+    const isPasswordValid = await bcrypt.compare(passwordInputByUser, passwordHash);
     return isPasswordValid;
 };
 
