@@ -7,8 +7,8 @@ const cors = require("cors");
 
 // Middleware
 app.use(cors({
-    origin: ["http://localhost:5173", "http://localhost:5174"], // Use an array for multiple origins
-    credentials: true, // Allow credentials to be sent with requests
+    origin: ["http://localhost:5173", "http://localhost:5174"], 
+    credentials: true, 
 }));
 
 app.use(express.json());

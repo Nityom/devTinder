@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import UserCard from './UserCard';
 import { useDispatch } from 'react-redux';
-import { addUser } from '../utils/userSlice'; // Ensure this import is correct
+import { addUser } from '../utils/userSlice'; 
 import { BASE_URL } from '../utils/constants';
 
 const EditProfile = ({ user }) => {
@@ -14,13 +14,13 @@ const EditProfile = ({ user }) => {
   const [photoUrl, setPhotoUrl] = useState(user.photoUrl);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [showToast, setShowToast] = useState(false); // State for toast notification
+  const [showToast, setShowToast] = useState(false); 
   const dispatch = useDispatch();
 
   const saveProfile = async () => {
     setLoading(true);
     setError('');
-    setShowToast(false); // Reset toast state on save attempt
+    setShowToast(false); 
 
     try {
       const res = await axios.patch(`${BASE_URL}/profile/edit`, {
@@ -35,12 +35,11 @@ const EditProfile = ({ user }) => {
       });
 
       dispatch(addUser(res?.data?.data));
-      setShowToast(true); // Show toast on successful save
-      
-      // Hide the toast after 3 seconds
+      setShowToast(true); 
+
       setTimeout(() => {
         setShowToast(false);
-      }, 3000); // Adjust the duration as needed
+      }, 3000); 
     } catch (err) {
       setError(err.response?.data?.message || err.message);
     } finally {
@@ -56,7 +55,7 @@ const EditProfile = ({ user }) => {
             <div className="card-body">
               <h2 className="card-title justify-center">Edit Profile</h2>
               {error && <p className="text-red-500">{error}</p>}
-              {showToast && ( // Conditionally render the toast notification
+              {showToast && ( 
                 <div className="toast my-16">
                   <div className="alert alert-success">
                     <span>Profile saved successfully</span>

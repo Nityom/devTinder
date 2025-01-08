@@ -13,11 +13,7 @@ const Feed = () => {
     if (feed && feed.length > 0) return; 
     try {
       const res = await axios.get( BASE_URL+ '/feed', { withCredentials: true });
-      
-      // Check the response data for debugging
       console.log('Fetched feed data:', res?.data);
-
-      // Dispatching the feed data to the Redux store
       dispatch(addFeed(res?.data)); 
     } catch (err) {
       console.error('Error fetching feed:', err);
@@ -27,12 +23,6 @@ const Feed = () => {
   useEffect(() => {
     getFeed();
   }, []); 
-
-  // Debugging feed length and data
-  useEffect(() => {
-    console.log('Current feed length:', feed.length);
-    console.log('Current feed data:', feed);
-  }, [feed]);
 
   return (
     <>
