@@ -28,14 +28,14 @@ if(connections.length === 0) return <h1>No Connections found</h1>;
 
   return (
     
-        <div className=' text-center my-10'>
+        <div  className=' text-center my-10'>
          <h1 className='text-bold text-white text-3xl'>Connections</h1>
          
             {connections.map((connection) => {
-                const {firstName, lastName, photoUrl,age, gender, about } = connection;
+                const {_id,firstName, lastName, photoUrl,age, gender, about } = connection;
 
                 return(
-                    <div className='flex mx-auto p-4 border rounded-lg bg-base-300 w-1/2'>
+                    <div key={_id} className='flex mx-auto p-4 border rounded-lg bg-base-300 w-1/2'>
                         <div> <img className='w-20 h-20 rounded-full mx-14 ' src={photoUrl} alt="photo" /></div>
                         <div className='text-left mx-4'>  
                             <h2 className='font-bold text-xl'>{firstName+" "+ lastName}</h2>
