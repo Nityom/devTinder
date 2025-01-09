@@ -7,19 +7,38 @@ const {validateSignUpData} = require("../utils/validation");
 // Signup route
 authRouter.post("/signup", async (req, res) => {
     try {
-        validateSignUpData(req);
-        const { firstName, lastName, emailId, password } = req.body;
+    
+      validateSignUpData(req);
+      const { firstName, lastName, emailId, password } = req.body;
+      const passwordHash = await bcrypt.hash(password, 10);
 
-        const passwordHash = await bcrypt.hash(password, 10);
+      const user = new User({
+        firstName,
+        lastName,
+        emailId,
+        password: passwordHash,
+      });
 
-        const user = new User({ firstName, lastName, emailId, password: passwordHash });
-        await user.save();
+      const savedUser = await user.save();
+      const token = await user.getJWT();
+      res.cookie("token", token,{
+        expires: new Date(Date.now() + 8 * 3600000), 
+      
+      });
+  
 
-        res.status(201).send("User added successfully");
+      res.json({
+        message: "User added successfully",
+        data: savedUser,
+      });
     } catch (err) {
-        res.status(400).json({ message: "Error in adding user", error: err.message });
+      // Catch and handle errors
+      res.status(400).json({
+        message: "Error in adding user",
+        error: err.message,
+      });
     }
-});
+  });
 
 
 // Login route
