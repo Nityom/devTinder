@@ -1,3 +1,3 @@
 
 
-export const BASE_URL = ["http://localhost:3000","https://dev-tinder-api-iota.vercel.app"];
+export const BASE_URL = "https://dev-tinder-api-iota.vercel.app";
