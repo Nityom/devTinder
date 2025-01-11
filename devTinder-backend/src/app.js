@@ -7,7 +7,7 @@ const cors = require("cors");
 
 // Middleware
 app.use(cors({
-    origin: "*", 
+    origin: ["http://localhost:5173", "http://localhost:5174","https://dev-tinder-frontend-nu.vercel.app"], 
     credentials: true, 
 }));
 

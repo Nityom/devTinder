@@ -87,7 +87,7 @@ connectionRequests.forEach((req)=>{
     hideUsersFromFeed.add(req.toUserId.toString());
 });
 
-console.log("hideUsersFromFeed",hideUsersFromFeed);
+// console.log("hideUsersFromFeed",hideUsersFromFeed);
 const users = await User.find({
     $and: [
         { _id: { $nin: Array.from(hideUsersFromFeed) } },
